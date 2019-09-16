@@ -125,8 +125,8 @@ exports.update = (req, res) => {
  * if no params are sent, then all prodects are returned
  */
 exports.list = (req, res) =>{
-    let order = req.query.order ? req.query.order : 'asc'
-    let sortBy = req.query.sortBy ? req.query.sorBy: '_id'
+    let order = req.query.order ? req.query.order : "asc"
+    let sortBy = req.query.sortBy ? req.query.sortBy: "_id"
     let limit = req.query.limit ? parseInt(req.query.limit) : 6
 
     Product.find()
@@ -153,7 +153,7 @@ exports.listRelated = (req, res) =>{
     Product.find({_id: {$ne: req.product}, category: req.product.category})
     .limit(limit)
     .populate('category', '_id name')
-    .exex((err, products) =>{
+    .exec((err, products) =>{
         if(err){
             return res.status(400).json({
                 error: "Products not found"
@@ -204,10 +204,10 @@ exports.listBySearch = (req, res)=>{
     Product.find(findArgs)
         .select('-photo')
         .populate('category')
-        .sory([[sortBy, order]])
+        .sort([[sortBy, order]])
         .skip(skip)
         .limit(limit)
-        .exex((err, data)=>{
+        .exec((err, data)=>{
             if(err){
                 return res.status(400).json({
                     error: 'Products not found'
@@ -222,7 +222,7 @@ exports.listBySearch = (req, res)=>{
 
 exports.photo = (req, res, next) =>{
     if(req.product.photo.data){
-        res.set('Content-Type', req.product.proto.contentType)
+        res.set('Content-Type', req.product.photo.contentType)
         return res.send(req.product.photo.data)
     }
     next();
